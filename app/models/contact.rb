@@ -9,6 +9,10 @@ class Contact < ApplicationRecord
     self.kind.description
   end
 
+  def hello
+    I18n.t("hello")
+  end
+
   # o método render json dos controllers chama o método as_json do model, podemos
   # sobreescrever este método passando options no seu argumento, chamando o super
   # para manter o chamada original e neste caso, estamos passando uma configuração
@@ -17,7 +21,7 @@ class Contact < ApplicationRecord
   # model com o root: true
   def as_json(options={})
     super(
-      methods: [:author, :kind_description], 
+      methods: [:author, :kind_description, :hello], 
       root: true,
     )
   end
