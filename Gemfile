@@ -47,3 +47,4 @@ group :development do
   # gem "spring"
 end
 
+gem 'rails-i18n', '~> 7.0.0'
