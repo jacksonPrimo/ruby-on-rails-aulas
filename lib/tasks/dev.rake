@@ -1,12 +1,17 @@
 namespace :dev do
   desc "Generate initial entities in dev environment"
   task setup: :environment do
+    puts "........... reseting databse ..............."
+    %x(rails db:drop db:create db:migrate)
+
+    puts "........... creating kinds ..............."
     ["coordenador", "dono", "gerente"].each do |kind|
       Kind.create!(
         description: kind
       )
     end
 
+    puts "........... creating contacts ..............."
     10.times do
       Contact.create!({
         name: Faker::Name.name,
@@ -16,10 +21,17 @@ namespace :dev do
       })
     end
 
+    puts "........... add relationship to contacts ..............."
     Contact.all.each do |contact|
+      Address.create(
+        street: Faker::Address.street_address,
+        city: Faker::Address.city,
+        contact: contact
+      )
       Random.rand(5).times do 
-        contact.phones << Phone.create(number: Faker::PhoneNumber.cell_phone) 
-        contact.save!
+        phone = Phone.create(number: Faker::PhoneNumber.cell_phone, contact: contact) 
+        # contact.phones << phone
+        # contact.save!
       end
     end
   end

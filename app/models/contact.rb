@@ -1,7 +1,10 @@
 class Contact < ApplicationRecord
   belongs_to :kind
   has_many :phones
+  has_one :address
+
   accepts_nested_attributes_for :phones, allow_destroy: true
+  accepts_nested_attributes_for :address
   # accepts_nested_attributes_for allow create contact with phones during register by phones_attributes
   # Contact.create({name: "jack", email: "jack@jack", birthdate: Date.today, kind_id: 1, phones_attributes: [{number: "87878"}]})
 
@@ -30,7 +33,7 @@ class Contact < ApplicationRecord
     super(
       # methods: [:author, :kind_description, :hello], 
       # root: true,
-      include: [:phones]
+      include: [:phones, :address]
     )
   end
 end
