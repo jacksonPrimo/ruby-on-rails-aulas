@@ -1,6 +1,12 @@
 class Contact < ApplicationRecord
   belongs_to :kind
   has_many :phones
+  accepts_nested_attributes_for :phones, allow_destroy: true
+  # accepts_nested_attributes_for allow create contact with phones during register by phones_attributes
+  # Contact.create({name: "jack", email: "jack@jack", birthdate: Date.today, kind_id: 1, phones_attributes: [{number: "87878"}]})
+
+  # allow_destroy allow delete phone inside contact by nested_attributes
+  # PATCH {name: "changed_name", phones_attributes: [{id: 1, _destroy: 1}]}
 
   def author 
     "jackson aquino"
@@ -22,8 +28,9 @@ class Contact < ApplicationRecord
   # model com o root: true
   def as_json(options={})
     super(
-      methods: [:author, :kind_description, :hello], 
-      root: true,
+      # methods: [:author, :kind_description, :hello], 
+      # root: true,
+      include: [:phones]
     )
   end
 end
